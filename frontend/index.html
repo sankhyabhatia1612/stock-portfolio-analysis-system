@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Portfolio Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-top">
+            <h1>Stock Portfolio Analysis System</h1>
+        </div>
+        <nav class="nav-bar">
+            <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="nav-btn" data-tab="users">Users & Investors</button>
+            <button class="nav-btn" data-tab="stocks">Stock Market</button>
+            <button class="nav-btn" data-tab="portfolios">Portfolios</button>
+            <button class="nav-btn" data-tab="transactions">Trade History</button>
+            <button class="nav-btn" data-tab="watchlists">Watchlists</button>
+        </nav>
+    </header>
+
+    <main class="main-container">
+
+        <!-- DASHBOARD TAB -->
+        <section id="dashboard" class="tab-pane active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Total Users</h4>
+                    <div class="stat-val" id="metric-total-users">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Active Portfolios</h4>
+                    <div class="stat-val" id="metric-active-portfolios">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Listed Stocks</h4>
+                    <div class="stat-val" id="metric-listed-stocks">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Trades</h4>
+                    <div class="stat-val" id="metric-total-trades">0</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Stock Sector Breakdown</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="sectorChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Portfolio Cash Allocation</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions-card">
+                <h3>Quick Database Navigation</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" data-switch-tab="users">+ Add New Investor</button>
+                    <button class="btn btn-success" data-switch-tab="stocks">+ List New Stock</button>
+                    <button class="btn btn-warning" data-switch-tab="transactions">+ Execute Buy/Sell Trade</button>
+                    <button class="btn btn-secondary" data-switch-tab="portfolios">+ Create Portfolio</button>
+                    <button class="btn btn-primary" data-switch-tab="watchlists">+ Track Watchlist</button>
+                </div>
+            </div>
+
+            <div class="table-card" style="margin-top: 2rem;">
+                <h3>Top Market Stocks</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Name</th>
+                            <th>Sector</th>
+                            <th>Price (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dash-stocks-summary-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- USERS & INVESTORS TAB -->
+        <section id="users" class="tab-pane">
+            <div class="form-card">
+                <h2>Investor Management</h2>
+                <p class="form-subtext">Add or update investor entries directly in the APP_USER and INVESTOR tables.</p>
+                <form id="form-add-user" class="grid-form">
+                    <div class="form-group">
+                        <label>User ID:</label>
+                        <input type="text" id="user-id" placeholder="e.g. U005" required>
+                    </div>
+                    <div class="form-group">
+                        <label>First Name:</label>
+                        <input type="text" id="user-fname" placeholder="e.g. Sankhya" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name:</label>
+                        <input type="text" id="user-lname" placeholder="e.g. Bhatia" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address:</label>
+                        <input type="email" id="user-email" placeholder="sankhya@example.com" required>
+                    </div>
+                    <div class="form-group form-full">
+                        <label>Risk Profile:</label>
+                        <select id="user-risk" style="max-width: 300px;">
+                            <option value="LOW">LOW</option>
+                            <option value="MEDIUM" selected>MEDIUM</option>
+                            <option value="HIGH">HIGH</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-full">
+                        <button type="submit" class="btn btn-primary btn-block">Save Investor Record</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <h3>Registered Database Users</h3>
+                <button class="btn btn-light btn-sm" id="btn-refresh-users" style="margin-top: 5px; margin-bottom: 15px;">Refresh List</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Risk Profile</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- STOCKS TAB -->
+        <section id="stocks" class="tab-pane">
+            <div class="form-card">
+                <h3>Add Stock Record</h3>
+                <p class="form-subtext">Register a new security in Oracle DB (Primary Key: Stock ID)</p>
+                <form id="form-add-stock" class="grid-form">
+                    <div class="form-group">
+                        <label>Stock ID</label>
+                        <input type="text" id="stock-id" placeholder="e.g. S007" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Symbol</label>
+                        <input type="text" id="stock-symbol" placeholder="e.g. TATAMOTORS" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input type="text" id="stock-name" placeholder="e.g. Tata Motors" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Exchange</label>
+                        <select id="stock-exchange">
+                            <option value="NSE">NSE</option>
+                            <option value="BSE">BSE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sector</label>
+                        <input type="text" id="stock-sector" placeholder="e.g. Automobile" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₹)</label>
+                        <input type="number" step="0.01" id="stock-price" placeholder="950.00" required>
+                    </div>
+                    <div class="form-group form-full">
+                        <button type="submit" class="btn btn-success">Add Stock to Market</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header-flex">
+                    <h3>Market Stocks Directory</h3>
+                    <input type="text" id="search-stocks" class="search-input" placeholder="Search stocks...">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stock ID</th>
+                            <th>Symbol</th>
+                            <th>Company Name</th>
+                            <th>Exchange</th>
+                            <th>Sector</th>
+                            <th>Price (₹)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stocks-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- PORTFOLIOS TAB -->
+        <section id="portfolios" class="tab-pane">
+            <div class="form-card">
+                <h3>Create Portfolio Record</h3>
+                <form id="form-add-portfolio" class="grid-form">
+                    <div class="form-group">
+                        <label>Portfolio ID</label>
+                        <input type="text" id="portfolio-id" placeholder="e.g. P003" required>
+                    </div>
+                    <div class="form-group">
+                        <label>User ID</label>
+                        <input type="text" id="portfolio-user-id" placeholder="e.g. U001" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Portfolio Name</label>
+                        <input type="text" id="portfolio-name" placeholder="e.g. Tech Growth" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cash Balance (₹)</label>
+                        <input type="number" step="0.01" id="portfolio-balance" placeholder="25000.00" required>
+                    </div>
+                    <div class="form-group form-full">
+                        <button type="submit" class="btn btn-secondary">Create Portfolio</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header-flex">
+                    <h3>Active Portfolios</h3>
+                    <input type="text" id="search-portfolios" class="search-input" placeholder="Search portfolios...">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Portfolio ID</th>
+                            <th>User ID</th>
+                            <th>Portfolio Name</th>
+                            <th>Cash Balance (₹)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="portfolios-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TRANSACTIONS TAB -->
+        <section id="transactions" class="tab-pane">
+            <div class="form-card">
+                <h3>Record Transaction</h3>
+                <form id="form-add-transaction" class="grid-form">
+                    <div class="form-group">
+                        <label>Transaction ID</label>
+                        <input type="text" id="trans-id" placeholder="e.g. T003" required>
+                    </div>
+                    <div class="form-group">
+                        <label>User ID</label>
+                        <input type="text" id="trans-user-id" placeholder="e.g. U001" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Stock ID</label>
+                        <input type="text" id="trans-stock-id" placeholder="e.g. S001" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="trans-type">
+                            <option value="BUY">BUY</option>
+                            <option value="SELL">SELL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" id="trans-qty" placeholder="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Execution Price (₹)</label>
+                        <input type="number" step="0.01" id="trans-price" placeholder="1450.00" required>
+                    </div>
+                    <div class="form-group form-full">
+                        <button type="submit" class="btn btn-warning">Execute Transaction</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header-flex">
+                    <h3>Transaction Audit Trail</h3>
+                    <input type="text" id="search-transactions" class="search-input" placeholder="Search trades...">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Trade ID</th>
+                            <th>User ID</th>
+                            <th>Stock ID</th>
+                            <th>Type</th>
+                            <th>Quantity</th>
+                            <th>Price (₹)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- WATCHLISTS TAB -->
+        <section id="watchlists" class="tab-pane">
+            <div class="form-card">
+                <h3>Add Watchlist Entry</h3>
+                <form id="form-add-watchlist" class="grid-form">
+                    <div class="form-group">
+                        <label>Watchlist ID</label>
+                        <input type="text" id="watchlist-id" placeholder="e.g. W003" required>
+                    </div>
+                    <div class="form-group">
+                        <label>User ID</label>
+                        <input type="text" id="watchlist-user-id" placeholder="e.g. U001" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Stock ID</label>
+                        <input type="text" id="watchlist-stock-id" placeholder="e.g. S002" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Symbol</label>
+                        <input type="text" id="watchlist-symbol" placeholder="e.g. TCS" required>
+                    </div>
+                    <div class="form-group form-full">
+                        <button type="submit" class="btn btn-primary">Track Stock</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header-flex">
+                    <h3>User Watchlists</h3>
+                    <input type="text" id="search-watchlists" class="search-input" placeholder="Search watchlists...">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Watchlist ID</th>
+                            <th>User ID</th>
+                            <th>Stock ID</th>
+                            <th>Symbol</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="watchlists-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
