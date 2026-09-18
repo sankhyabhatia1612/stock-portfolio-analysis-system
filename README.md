@@ -240,3 +240,83 @@ stock-portfolio-analysis-system/
 │   └── app.js                     # Tab routing, state engine & API fetch logic
 ├── .gitignore                     # Git exclusion rules
 └── README.md                      # Project documentation
+---
+
+## ⚙️ Complete Setup / Run Instructions
+
+### Database Setup
+1. Open SQL*Plus or SQL Developer and connect to your Oracle 21c instance.
+2. Run the database setup scripts:
+   ```sql
+   @database/schema.sql;
+   @database/sample_data.sql;
+
+### Backend Setup
+1. Open Command Prompt and navigate to the `backend/` directory:
+   ```cmd
+   cd backend
+   javac -cp ".;ojdbc8.jar" *.java
+   java -cp ".;ojdbc8.jar" backend.MainApp
+2. The server will start listening at `http://localhost:8080`.
+
+### Frontend Setup
+1. Open your terminal or file explorer and go to the `frontend/` directory.
+2. Double-click `index.html` to launch the client interface in any standard web browser.
+
+---
+
+## 🎓 Suggested Demonstration Flow for Your Evaluator
+
+1. **Architecture & Schema Overview:** Introduce the 3-tier structure (HTML/CSS/JS frontend, Java HTTP REST server, Oracle 21c Database).
+2. **Dashboard Review:** Highlight real-time aggregation cards and Chart.js sector distribution.
+3. **Investor Registration:** Create a new user with a specified risk profile and demonstrate form validation.
+4. **Stock Market Directory:** Search equities using real-time search filters.
+5. **Trade Execution:** Execute an atomic `BUY` order and prove instant transaction logging.
+6. **PL/SQL Verification:** Open SQL*Plus and show the `TRG_UPDATE_PORTFOLIO_CASH` trigger automatically updating cash balances.
+
+---
+
+## 👥 Team Responsibilities
+
+- **Sankhya Bhatia (25BCE1362)** — *Backend Integration*
+- **Vaibhavi Gupta (25BCE1386)** — *Frontend*
+- **Arya Rajendra Yadav (25BCE1374)** — *Database*
+
+---
+
+## ⚡ DBMS Concepts Demonstrated
+
+- **Relational Normalization:** 3NF / BCNF compliant database schema design.
+- **Transactional Integrity:** Strict ACID compliance across trade executions.
+- **Advanced PL/SQL Routines:** Stored procedures, functions, automated triggers, and pre-compiled views.
+- **Constraint Enforcement:** `PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, `CHECK`, and `NOT NULL` rules.
+
+---
+
+## 📝 Current Implementation Notes
+
+- Operating on local deployment setup (`http://localhost:8080`).
+- Completely framework-free implementation relying on native Java APIs and Oracle JDBC driver.
+
+---
+
+## 🚀 Future Enhancements
+
+- **Role-Based Access Control (RBAC):** Distinct investor and compliance administrator portals.
+- **External Market API Integration:** Streaming live price feeds for global equities.
+- **Statement Generator:** Exporting PDF/CSV transaction logs and tax statements.
+
+---
+
+## 🔒 Security Note
+
+- **Credential Isolation:** Sensitive credentials stored in environment variables (`DB_USER`, `DB_PASS`) rather than plaintext source code.
+- **SQL Injection Prevention:** All SQL statements compiled using JDBC parameterized `PreparedStatement` wrappers.
+
+---
+
+## 🌐 GitHub Repository Information
+
+- **Repository Name:** `stock-portfolio-analysis-system`
+- **Owner:** `sankhyabhatia1612`
+- **Access Link:** [GitHub Repository](https://github.com/sankhyabhatia1612/stock-portfolio-analysis-system)
