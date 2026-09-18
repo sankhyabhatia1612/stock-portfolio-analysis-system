@@ -240,7 +240,8 @@ stock-portfolio-analysis-system/
 │   └── app.js                     # Tab routing, state engine & API fetch logic
 ├── .gitignore                     # Git exclusion rules
 └── README.md                      # Project documentation
----
+```
+
 
 ## ⚙️ Complete Setup / Run Instructions
 
@@ -250,6 +251,7 @@ stock-portfolio-analysis-system/
    ```sql
    @database/schema.sql;
    @database/sample_data.sql;
+   ```
 
 ### Backend Setup
 1. Open Command Prompt and navigate to the `backend/` directory:
@@ -257,6 +259,8 @@ stock-portfolio-analysis-system/
    cd backend
    javac -cp ".;ojdbc8.jar" *.java
    java -cp ".;ojdbc8.jar" backend.MainApp
+   ```
+
 2. The server will start listening at `http://localhost:8080`.
 
 ### Frontend Setup
