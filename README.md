@@ -4,11 +4,11 @@ A production-grade, 3-tier full-stack application engineered for real-time stock
 
 ---
 
-## 📌 Executive Summary
+## 📌 Project Summary
 
-In traditional academic setups, Database Management Systems (DBMS) are often demonstrated using simple Command Line Interface (CLI) queries. This project eliminates this limitation by integrating a rich visual dashboard directly with an Oracle Relational Database Engine.
+In traditional academic setups, Database Management Systems (DBMS) are often demonstrated solely through Command Line Interface (CLI) queries. This project bridges that gap by coupling a high-performance Oracle 21c Relational Database with a modern visual web dashboard.
 
-The system enforces strict relational integrity, ACID compliance, primary/foreign key constraints, and transactional auditing across stock market equities, portfolio cash balances, user watchlists, and market trades.
+All financial entities—investors, portfolios, stock equities, market trades, and watchlists—are modeled according to relational design best practices and manipulated through transactional JDBC REST endpoints.
 
 ---
 
@@ -16,7 +16,7 @@ The system enforces strict relational integrity, ACID compliance, primary/foreig
 
 The application adopts a completely decoupled 3-tier enterprise architecture:
 
-- **Presentation Layer (Frontend):** Built using semantic HTML5, modern CSS3 custom variables, vanilla JavaScript (ES6+), and Chart.js. Operates cleanly without external heavy dependencies or bundlers.
+- **Presentation Layer (Frontend):** Built with semantic HTML5, modern CSS variables, and vanilla JavaScript (ES6+). Operates cleanly without heavy bundlers or client-side frameworks.
 - **Business Logic Layer (Backend):** A multi-threaded, custom Java HTTP Server (`com.sun.net.httpserver`) built with Java Database Connectivity (JDBC) and Data Access Object (DAO) design patterns.
 - **Data Persistence Layer (Database):** Enterprise Oracle 21c Relational Database Management System (RDBMS) featuring SQL DDL schemas, constraints, PL/SQL stored routines, triggers, and automated views.
 
@@ -24,11 +24,11 @@ The application adopts a completely decoupled 3-tier enterprise architecture:
 
 ## ⚡ DBMS Concepts & PL/SQL Features Implemented
 
-This project extensively leverages advanced Relational Database Management System concepts:
+The database architecture leverages advanced Relational Database Management System concepts:
 
 ### 1. Advanced SQL & Aggregate Functions
 - **Aggregation & Analytics:** Uses `SUM()`, `AVG()`, `COUNT()`, and `GROUP BY` clauses to compute real-time metrics such as total portfolio asset values, average stock execution prices, and total active users.
-- **Multi-Table Joins:** Utilizes `INNER JOIN` and `LEFT OUTER JOIN` queries across `USERS`, `PORTFOLIO`, `STOCKS`, and `TRANSACTIONS` tables for comprehensive audit reports.
+- **Multi-Table Joins:** Utilizes `INNER JOIN` and `LEFT OUTER JOIN` queries across `USERS`, `PORTFOLIO`, `STOCKS`, and `TRANSACTIONS` tables for audit reports.
 - **Relational Integrity:** Strict enforcement of `PRIMARY KEY`, `FOREIGN KEY` (with `ON DELETE CASCADE`), `UNIQUE` email constraints, and `CHECK` constraints on stock prices and transaction quantities.
 
 ### 2. PL/SQL Stored Procedures & Functions
@@ -43,23 +43,10 @@ This project extensively leverages advanced Relational Database Management Syste
 
 ## 🔥 Core System Functionalities
 
-### 1. Interactive Analytics Dashboard
-- **Live Metric Cards:** Instant status readouts for Total Users, Active Portfolios, Listed Stocks, and Executed Trades.
-- **Sector Distribution Chart:** Dynamic Chart.js Doughnut chart tracking investment allocations across market sectors (IT, Finance, Energy, Healthcare).
-- **Cash Balance Allocation:** Visual Bar chart illustrating liquidity profiles across investor accounts.
-
-### 2. Investor & Risk Administration
-- **User Registration Engine:** Full onboarding system capturing Name, Email, and Risk Tolerance (`LOW`, `MEDIUM`, `HIGH`).
-- **Constraint Checker:** Client-side and server-side validation preventing duplicate User IDs or duplicate email registrations.
-- **Visual Risk Badges:** Dynamic color-coded pill indicators (`LOW` = Green, `MEDIUM` = Blue, `HIGH` = Red).
-
-### 3. Equity & Market Management
-- **Stock Directory:** List securities across major exchanges (`NSE`/`BSE`) with Ticker Symbols, Sectors, and Live Prices.
-- **Instant Keyword Search:** Real-time client-side filter engine for searching stocks by symbol, company name, or sector.
-
-### 4. Portfolio & Trade Auditing
-- **Trade Execution Ledger:** Record atomic `BUY` and `SELL` market orders with automated timestamp logging.
-- **Investor Watchlists:** Track high-potential stocks on a per-user basis.
+- **Interactive Analytics Dashboard:** Real-time summary metrics, trade history ledger, and visual distribution charts for sectors and account cash balances.
+- **Investor & Risk Administration:** Onboarding engine for registering users with specific risk profiles (`LOW`, `MEDIUM`, `HIGH`) and strict unique constraint validation.
+- **Equity Directory & Search:** Comprehensive table of listed stocks (`NSE`/`BSE`) with ticker symbols, prices, and instant keyword filtering.
+- **Trade Execution Ledger:** Record atomic `BUY` and `SELL` transactions with automated timestamp logging and balance calculations.
 
 ---
 
