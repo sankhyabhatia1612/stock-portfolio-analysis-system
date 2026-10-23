@@ -230,7 +230,6 @@ The schema also defines two transaction-related tables:
 
 Both tables reference `TRANSACTIONS` through `TRANS_ID`.
 
-**Note:** The provided schema does not contain an explicit transaction-type column in `TRANSACTIONS`. Buy and sell details are represented by the separate `BUY_TRANSACTION` and `SELL_TRANSACTION` tables.
 
 ---
 
@@ -316,7 +315,6 @@ The supplied `schema.sql` defines the following 17 tables.
 | 16 | `WATCHLIST_STOCK` | Stocks associated with watchlist identifiers |
 | 17 | `ADVISOR_WATCHLIST` | Advisor-associated watchlist tracking records |
 
-**Important:** These names match the supplied `schema.sql`. Tables such as `USERS`, `STOCKS`, `WATCHLIST`, `DIVIDENDS`, `ORDERS`, and `PORTFOLIO_ANALYTICS` are not defined in that file.
 
 ---
 
