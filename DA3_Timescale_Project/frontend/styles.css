@@ -1,0 +1,302 @@
+/* ==========================================
+   GLOBAL BASE STYLES
+   ========================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    color: #1a202c;
+}
+
+/* ==========================================
+   HEADER & NAVIGATION BAR
+   ========================================== */
+.app-header {
+    background-color: #0f172a;
+    color: #ffffff;
+    padding: 1.5rem 2rem 0 2rem;
+}
+
+.header-top {
+    text-align: center;
+    margin-bottom: 1.2rem;
+}
+
+.header-top h1 {
+    font-size: 1.8rem;
+    letter-spacing: 0.5px;
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    overflow-x: auto;
+}
+
+.nav-btn, .nav-link {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover, .nav-btn.active,
+.nav-link:hover, .nav-link.active {
+    color: #ffffff;
+    border-bottom-color: #38bdf8;
+}
+
+/* ==========================================
+   MAIN LAYOUT & TAB ENGINE
+   ========================================== */
+.main-container {
+    max-width: 1250px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Strict display rules to guarantee smooth tab switching */
+.tab-pane, .tab-content {
+    display: none !important;
+}
+
+.tab-pane.active, .tab-content.active {
+    display: block !important;
+}
+
+/* ==========================================
+   DASHBOARD METRICS & CARDS
+   ========================================== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-top: 4px solid #3b82f6;
+}
+
+.stat-card h4 {
+    color: #64748b;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.stat-val {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #0f172a;
+    margin-top: 8px;
+}
+
+/* Charts Grid */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 250px;
+    margin-top: 1rem;
+}
+
+/* Quick Database Navigation */
+.quick-actions-card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+/* ==========================================
+   FORMS & INPUT CARDS
+   ========================================== */
+.form-card, .table-card {
+    background: #ffffff;
+    padding: 1.8rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+.form-subtext {
+    color: #64748b;
+    font-size: 0.85rem;
+    margin-bottom: 1.2rem;
+}
+
+.grid-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #334155;
+}
+
+.form-group input, .form-group select {
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: #2563eb;
+}
+
+.form-full {
+    grid-column: 1 / -1;
+}
+
+/* ==========================================
+   BUTTONS & ACTIONS
+   ========================================== */
+.btn {
+    padding: 9px 16px;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-primary   { background: #2563eb; color: #fff; }
+.btn-success   { background: #16a34a; color: #fff; }
+.btn-warning   { background: #d97706; color: #fff; }
+.btn-danger    { background: #dc2626; color: #fff; }
+.btn-secondary { background: #475569; color: #fff; }
+.btn-sm        { padding: 5px 12px; font-size: 0.8rem; }
+
+/* Full-width action button for investor management */
+.btn-block {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    background-color: #2563eb;
+    color: #ffffff;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.btn-light {
+    background: #e2e8f0;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+/* ==========================================
+   TABLES & BADGES
+   ========================================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.85rem;
+}
+
+tr:hover {
+    background: #f1f5f9;
+}
+
+.table-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    width: 250px;
+}
+
+/* Solid Pill Badges for Risk Profiles */
+.badge-pill {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #ffffff !important;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.badge-low    { background-color: #00c853 !important; }
+.badge-medium { background-color: #00b0ff !important; }
+.badge-high   { background-color: #ff1744 !important; }
+
+/* Generic badges for Buy/Sell & Stock symbols */
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.badge-buy  { background: #dcfce7; color: #15803d; }
+.badge-sell { background: #fee2e2; color: #b91c1c; }
+.stock-symbol { font-weight: 700; color: #1e40af; }
