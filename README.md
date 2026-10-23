@@ -1,6 +1,6 @@
-# Stock Portfolio Analysis & Management System
+# Stock Portfolio Analysis & Management System 
 
-A production-grade, 3-tier full-stack application engineered for real-time stock portfolio tracking, equity analytics, and investor risk management. The application bridges a modern single-page web interface with an enterprise Oracle 21c Database via a custom Java JDBC HTTP REST server.
+A 3-tier stock portfolio analysis and management application developed using a web frontend, Java JDBC backend, and Oracle Database 21c. The project demonstrates relational database design, SQL operations, database connectivity, portfolio management, and stock transaction tracking.
 
 ---
 
@@ -8,7 +8,7 @@ A production-grade, 3-tier full-stack application engineered for real-time stock
 
 - [Project Overview](#-project-overview)
 - [Objectives](#-objectives)
-- [Complete Technology Stack](#-complete-technology-stack)
+- [Technology Stack](#-technology-stack)
 - [System Architecture](#-system-architecture)
 - [Data Flow](#-data-flow)
 - [Dashboard Functionalities](#-dashboard-functionalities)
@@ -19,308 +19,704 @@ A production-grade, 3-tier full-stack application engineered for real-time stock
 - [Watchlist Management](#-watchlist-management)
 - [Stock Price History](#-stock-price-history)
 - [Portfolio Analysis](#-portfolio-analysis)
-- [All Database Tables](#-all-database-tables)
+- [Database Tables](#-database-tables)
 - [Important Database Relationships](#-important-database-relationships)
-- [Primary / Foreign / Composite Keys](#-primary--foreign--composite-keys)
+- [Primary, Foreign and Composite Keys](#-primary-foreign-and-composite-keys)
 - [Java Backend Explanation](#-java-backend-explanation)
 - [JDBC Integration](#-jdbc-integration)
 - [API Endpoints](#-api-endpoints)
 - [Frontend Explanation](#-frontend-explanation)
 - [Project Folder Structure](#-project-folder-structure)
-- [Complete Setup / Run Instructions](#-complete-setup--run-instructions)
-  - [Database Setup](#database-setup)
-  - [Backend Setup](#backend-setup)
-  - [Frontend Setup](#frontend-setup)
-- [Suggested Demonstration Flow for Your Evaluator](#-suggested-demonstration-flow-for-your-evaluator)
+- [Setup and Run Instructions](#-setup-and-run-instructions)
+- [Demonstration Flow](#-demonstration-flow)
 - [Team Responsibilities](#-team-responsibilities)
 - [DBMS Concepts Demonstrated](#-dbms-concepts-demonstrated)
 - [Current Implementation Notes](#-current-implementation-notes)
 - [Future Enhancements](#-future-enhancements)
 - [Security Note](#-security-note)
-- [GitHub Repository Information](#-github-repository-information)
+- [Repository Information](#-repository-information)
 
 ---
 
 ## 📌 Project Overview
 
-In traditional academic setups, Database Management Systems (DBMS) are often demonstrated solely through Command Line Interface (CLI) queries. This project eliminates that limitation by coupling an enterprise Oracle 21c Database with an intuitive web UI. All core financial entities—investors, trading accounts, stock equities, market orders, and watchlists—are modeled using relational design best practices and manipulated through transactional REST APIs.
+The Stock Portfolio Analysis & Management System is a database-driven application developed using Java and Oracle Database. It helps users manage portfolios, track stock holdings, record transactions, and monitor stock prices through a centralized system.
+
+The database schema models different user roles, clients, portfolios, stocks, holdings, transactions, and watchlist information using primary keys, foreign keys, constraints, and relational associations.
 
 ---
 
 ## 🎯 Objectives
 
-- Provide a reliable, production-ready full-stack platform for portfolio management.
-- Demonstrate enterprise relational database architecture using Oracle 21c RDBMS.
-- Enforce business logic directly inside the database via PL/SQL routines, triggers, and constraints.
-- Implement robust multi-tiered execution using Java HTTP REST Server and raw JDBC drivers without heavy external ORM dependencies.
+- To manage stock portfolios and holdings efficiently.
+- To record and track buy/sell transactions.
+- To maintain stock information and price history.
+- To implement database concepts such as relationships, constraints, and SQL operations.
 
 ---
 
-## 💻 Complete Technology Stack
+## 💻 Technology Stack
 
-- **Frontend:** Semantic HTML5, CSS3 Custom Properties, JavaScript (ES6+ Vanilla), Chart.js.
-- **Backend:** Java 11+, Native Java HTTP Server (`com.sun.net.httpserver`), Data Access Object (DAO) Pattern.
-- **Database:** Oracle Database 21c Express Edition (XE) / Enterprise, PL/SQL, Oracle JDBC Driver (`ojdbc8.jar`).
-- **Version Control & Tools:** Git, GitHub, SQL*Plus / Oracle SQL Developer.
+| Component | Technology |
+|---|---|
+| Frontend | HTML5, CSS3, JavaScript |
+| Charts | Chart.js, if enabled in the frontend |
+| Backend | Java |
+| HTTP Server | Java Native HTTP Server (`com.sun.net.httpserver`), if used by the implementation |
+| Database | Oracle Database 21c XE |
+| Database Connectivity | Java Database Connectivity (JDBC) |
+| JDBC Driver | Oracle JDBC driver |
+| SQL Tools | SQL*Plus / Oracle SQL Developer |
+| Code Editor | Visual Studio Code |
+| Version Control | Git and GitHub |
 
 ---
 
 ## 🏗️ System Architecture
 
-The project follows a completely decoupled 3-tier enterprise architecture:
+The project follows a three-tier architecture.
 
-1. **Presentation Layer (Frontend):** Modern single-page web interface providing interactive dashboards and data tables.
-2. **Business Logic Layer (Backend):** Java HTTP REST server handling API routes, request parsing, response serializations, and database connection pooling.
-3. **Data Persistence Layer (Database):** Oracle 21c RDBMS enforcing schema constraints, relational integrity, PL/SQL routines, and automated audit triggers.
+### 1. Presentation Layer
+
+The frontend provides the user interface for displaying and interacting with application data. It uses HTML, CSS, and JavaScript.
+
+### 2. Business Logic Layer
+
+The Java backend handles application requests and communicates with the Oracle database using JDBC. Its exact responsibilities depend on the implemented Java classes and API routes.
+
+### 3. Data Persistence Layer
+
+Oracle Database 21c stores the application's relational data, including users, investors, portfolios, stocks, holdings, transactions, and watchlist records.
+
+### Architecture Diagram
+
+```text
++----------------------------------+
+|       Presentation Layer         |
+|     HTML, CSS and JavaScript     |
++----------------------------------+
+                |
+                | HTTP Requests
+                v
++----------------------------------+
+|       Business Logic Layer       |
+|          Java Backend            |
+|          JDBC Connectivity       |
++----------------------------------+
+                |
+                | SQL / JDBC
+                v
++----------------------------------+
+|        Data Persistence Layer    |
+|       Oracle Database 21c        |
+| Tables, Keys and Constraints     |
++----------------------------------+
+```
 
 ---
 
 ## 🔄 Data Flow
 
-1. User interacts with UI (e.g., submits a trade or views portfolio).
-2. Frontend JavaScript dispatches an asynchronous REST request (`fetch`) with JSON payload to the Java backend server (`localhost:8080`).
-3. Java `MainApp` router delegates request handling to `StockDAO.java`.
-4. `StockDAO` executes parameterized SQL/PLSQL commands over JDBC connection.
-5. Oracle Database processes transaction, runs automated triggers, and updates tables.
-6. Execution results are transformed into standard JSON responses and returned to UI.
+The general data flow of the application is:
+
+1. The user interacts with the frontend.
+2. The frontend sends a request to the Java backend when the relevant API is implemented.
+3. The backend processes the request and communicates with Oracle Database through JDBC.
+4. Oracle executes the corresponding SQL operation.
+5. The backend returns the result to the frontend.
+6. The frontend displays the returned information.
+
+For operations that modify records, the database changes depend on the SQL statements and transaction-handling logic implemented by the backend.
 
 ---
 
 ## 📊 Dashboard Functionalities
 
-- **Live Summary Cards:** Instant counters for total registered users, listed stocks, active portfolios, and executed trades.
-- **Sector Allocation Chart:** Dynamic Chart.js doughnut chart breaking down investments by market sectors.
-- **Cash Liquidity Bar:** Visual distribution chart showing user liquidity profiles.
+The dashboard can provide a consolidated view of stock portfolio information.
+
+Possible dashboard components include:
+
+- Summary of registered users.
+- Stock directory and stock prices.
+- Portfolio and holding information.
+- Transaction history.
+- Historical stock price information.
+- Portfolio valuation and investment distribution charts.
+
+The availability of individual cards, charts, and calculations depends on the current frontend and backend implementation.
 
 ---
 
 ## 👤 Investor Management
 
-- Register new investors with risk profile indicators (`LOW`, `MEDIUM`, `HIGH`).
-- Enforce strict unique constraints on investor email addresses and ID assignments.
-- View detailed investor portfolio holdings and available cash balances.
+The database separates general user information from investor-specific information.
+
+The `APP_USER` table stores general user details, while the `INVESTOR` table stores investor-specific information.
+
+The schema supports:
+
+- User identification and personal information.
+- Email addresses with a unique constraint.
+- Account status and creation timestamp.
+- Investor risk profile information.
+- A foreign key connecting investor records to application users.
+
+The schema defines the investor's risk profile as a column in `INVESTOR`. It does not define a separate `RISK_PROFILES` table.
 
 ---
 
 ## 📈 Stock Management
 
-- Directory listing of stocks across major exchanges (`NSE`/`BSE`).
-- Real-time client-side filter engine to search stocks by symbol, company name, or sector.
-- Add or update stock price details with system-wide integrity checks.
+The `STOCK` table stores information about listed equities.
+
+Its columns include:
+
+- `STOCK_ID` — Primary key.
+- `STOCK_SYMBOL` — Unique stock symbol.
+- `STOCK_NAME` — Stock name.
+- `EXCHANGE` — Exchange information.
+- `SECTOR` — Sector classification.
+- `CURRENT_PRICE` — Current recorded price.
+- `LAST_UPDATED` — Timestamp of the last update.
+
+These fields support maintaining a stock directory and associating stocks with portfolio holdings, transactions, and historical prices.
+
+The schema stores exchange and sector information directly in `STOCK`; it does not define separate `EXCHANGES` or `SECTORS` tables.
 
 ---
 
 ## 💼 Portfolio Management
 
-- Dynamic allocation tracking connecting investors to their owned equities.
-- Real-time stock valuation updates calculating current asset holdings value.
-- Automated cash balance calculations upon stock purchase or liquidation.
+The `PORTFOLIO` table stores portfolio information.
+
+Important columns include:
+
+- `PORTFOLIO_ID` — Unique portfolio identifier.
+- `USER_ID` — References the portfolio owner in `APP_USER`.
+- `PORTFOLIO_NAME` — Portfolio name.
+- `CASH_BALANCE` — Portfolio cash balance.
+
+The `HOLDING` table stores stock positions associated with portfolios.
+
+Its important columns include:
+
+- `HOLDING_ID` — Unique holding identifier.
+- `PORTFOLIO_ID` — References `PORTFOLIO`.
+- `STOCK_ID` — References `STOCK`.
+- `TOTAL_QUANTITY` — Quantity held.
+- `AVG_PRICE` — Average recorded price.
+
+Together, these tables represent portfolios and the stocks associated with them.
 
 ---
 
 ## 💳 Transaction Management
 
-- Atomic market order execution (`BUY` / `SELL`).
-- Immutable transaction history ledger capturing order types, execution prices, quantities, and timestamps.
-- Validation checks preventing purchases exceeding available cash or sales exceeding owned stock quantity.
+The `TRANSACTIONS` table records stock transaction information.
+
+Its columns include:
+
+- `TRANS_ID` — Transaction identifier.
+- `PORTFOLIO_ID` — Associated portfolio.
+- `STOCK_ID` — Associated stock.
+- `QUANTITY` — Transaction quantity.
+- `TRANS_FEE` — Transaction fee.
+- `TRANS_DATE` — Transaction date.
+
+The schema also defines two transaction-related tables:
+
+- `BUY_TRANSACTION` — Stores buy-specific brokerage information.
+- `SELL_TRANSACTION` — Stores sell-specific brokerage information.
+
+Both tables reference `TRANSACTIONS` through `TRANS_ID`.
+
+**Note:** The provided schema does not contain an explicit transaction-type column in `TRANSACTIONS`. Buy and sell details are represented by the separate `BUY_TRANSACTION` and `SELL_TRANSACTION` tables.
 
 ---
 
 ## ⭐ Watchlist Management
 
-- Custom watchlists enabling investors to track potential equity targets.
-- Dynamic addition and removal of ticker symbols linked to user profiles.
+The schema defines three watchlist-related tables.
+
+### `WATCHLIST_ITEM`
+
+Stores a user's watchlist identifier and the date it was added.
+
+The primary key is the combination of `USER_ID` and `WATCH_ID`.
+
+### `WATCHLIST_STOCK`
+
+Associates a stock with a watchlist identifier and user identifier. It also contains a `REFERENCE_NO` field.
+
+Its composite primary key consists of:
+
+`(USER_ID, WATCH_ID, STOCK_ID)`
+
+### `ADVISOR_WATCHLIST`
+
+Stores advisor-associated watchlist tracking information, including `TRACKED_AT`.
+
+Its composite primary key consists of:
+
+`(ADVISOR_ID, USER_ID, WATCH_ID)`
+
+These tables establish watchlist-related associations. Additional application logic may be needed to enforce relationships that are not explicitly defined by foreign keys in the supplied schema.
 
 ---
 
 ## 📜 Stock Price History
 
-- Track price movements and historical evaluation records for listed equities.
-- Maintain auditing transparency for market price fluctuations over time.
+The `STOCK_PRICE_HISTORY` table stores historical stock price records.
+
+Its columns include:
+
+- `PRICE_ID` — Primary key.
+- `STOCK_ID` — References the associated stock.
+- `PRICE_DATE` — Date of the price record.
+- `OPENING_PRICE` — Opening price.
+- `CLOSING_PRICE` — Closing price.
+- `HIGH_PRICE` — Highest recorded price.
+- `LOW_PRICE` — Lowest recorded price.
+
+The table allows historical price information to be associated with stocks.
+
+Historical comparisons, charts, and price trend calculations can be implemented using these records.
 
 ---
 
 ## 🔍 Portfolio Analysis
 
-- Calculate total net worth dynamically using PL/SQL subroutines.
-- Perform sector-wise risk assessment and cash liquidity analysis across portfolios.
+Portfolio analysis can use the data stored in `PORTFOLIO`, `HOLDING`, `STOCK`, and `TRANSACTIONS`.
+
+The system maintains portfolio holdings, quantities, average purchase prices, cash balances, and transaction records. These details can support portfolio monitoring and analysis. Any calculated returns, profit/loss values, or visual analytics depend on the implemented application logic.
 
 ---
 
-## 🗄️ All Database Tables
+## 🗄️ Database Tables
 
-1. **`USERS`:** Investor profile and account records.
-2. **`STOCKS`:** Listed stock directory and pricing details.
-3. **`PORTFOLIO`:** Equity holdings map linking investors and stocks.
-4. **`TRANSACTIONS`:** Audit ledger for trade order records.
-5. **`WATCHLIST`:** Investor target tracking watchlist.
-6. **`SECTORS`:** Industry classification directory.
-7. **`EXCHANGES`:** Market exchange master directory (NSE/BSE).
-8. **`STOCK_PRICES_HISTORY`:** Historical price tracking table.
-9. **`RISK_PROFILES`:** Risk category definition table.
-10. **`USER_ACCOUNTS`:** Banking cash balance references.
-11. **`ORDERS`:** Order queue state tracking.
-12. **`ORDER_DETAILS`:** Detailed breakdown per trade order.
-13. **`DIVIDENDS`:** Dividend distribution records.
-14. **`PORTFOLIO_ANALYTICS`:** Pre-computed analytics summaries.
-15. **`AUDIT_LOGS`:** System security audit trails.
-16. **`SYSTEM_SETTINGS`:** Configuration key-value pairs.
-17. **`NOTIFICATIONS`:** Investor system alerts.
+The supplied `schema.sql` defines the following 17 tables.
+
+| No. | Table Name | Purpose |
+|---:|---|---|
+| 1 | `APP_USER` | General user information and account details |
+| 2 | `INVESTOR` | Investor-specific details and risk profile |
+| 3 | `ADVISOR` | Advisor information and expertise |
+| 4 | `ADMIN` | Administrator information and permissions |
+| 5 | `CLIENT` | Client identification and names |
+| 6 | `INDIVIDUAL` | Individual client records |
+| 7 | `INSTITUTIONAL` | Institutional client records |
+| 8 | `PORTFOLIO` | Portfolio names, owners, and cash balances |
+| 9 | `STOCK` | Stock symbols, names, exchanges, sectors, and prices |
+| 10 | `STOCK_PRICE_HISTORY` | Historical stock price records |
+| 11 | `HOLDING` | Stock quantities and average prices in portfolios |
+| 12 | `TRANSACTIONS` | Stock transaction details |
+| 13 | `BUY_TRANSACTION` | Buy-specific brokerage information |
+| 14 | `SELL_TRANSACTION` | Sell-specific brokerage information |
+| 15 | `WATCHLIST_ITEM` | User-associated watchlist identifiers |
+| 16 | `WATCHLIST_STOCK` | Stocks associated with watchlist identifiers |
+| 17 | `ADVISOR_WATCHLIST` | Advisor-associated watchlist tracking records |
+
+**Important:** These names match the supplied `schema.sql`. Tables such as `USERS`, `STOCKS`, `WATCHLIST`, `DIVIDENDS`, `ORDERS`, and `PORTFOLIO_ANALYTICS` are not defined in that file.
 
 ---
 
 ## 🔗 Important Database Relationships
 
-- **`USERS` to `PORTFOLIO`:** One-to-Many relationship (An investor can hold multiple portfolio items).
-- **`STOCKS` to `PORTFOLIO`:** One-to-Many relationship (A stock can be held across multiple investor portfolios).
-- **`USERS` to `TRANSACTIONS`:** One-to-Many relationship (An investor generates multiple trade transactions).
+The following relationships are explicitly defined through foreign keys in the supplied schema.
+
+| Parent Table | Child Table | Relationship |
+|---|---|---|
+| `APP_USER` | `INVESTOR` | Investor references an application user |
+| `APP_USER` | `ADVISOR` | Advisor references an application user |
+| `APP_USER` | `ADMIN` | Administrator references an application user |
+| `APP_USER` | `PORTFOLIO` | Portfolio references its owner |
+| `CLIENT` | `INDIVIDUAL` | Individual record references a client |
+| `CLIENT` | `INSTITUTIONAL` | Institutional record references a client |
+| `PORTFOLIO` | `HOLDING` | Holding references a portfolio |
+| `STOCK` | `HOLDING` | Holding references a stock |
+| `PORTFOLIO` | `TRANSACTIONS` | Transaction references a portfolio |
+| `STOCK` | `TRANSACTIONS` | Transaction references a stock |
+| `STOCK` | `STOCK_PRICE_HISTORY` | Historical price record references a stock |
+| `TRANSACTIONS` | `BUY_TRANSACTION` | Buy record references a transaction |
+| `TRANSACTIONS` | `SELL_TRANSACTION` | Sell record references a transaction |
+| `APP_USER` | `WATCHLIST_ITEM` | Watchlist item references a user |
+| `STOCK` | `WATCHLIST_STOCK` | Watchlist stock entry references a stock |
+| `ADVISOR` | `ADVISOR_WATCHLIST` | Advisor watchlist record references an advisor |
+
+The schema also specifies `ON DELETE CASCADE` for its defined foreign keys. This means deleting a referenced parent record can automatically delete related child records.
 
 ---
 
-## 🔑 Primary / Foreign / Composite Keys
+## 🔑 Primary, Foreign and Composite Keys
 
-- **Primary Keys:** `user_id` in `USERS`, `stock_id` in `STOCKS`, `transaction_id` in `TRANSACTIONS`.
-- **Foreign Keys:** `user_id` in `PORTFOLIO` references `USERS(user_id)`, `stock_id` in `PORTFOLIO` references `STOCKS(stock_id)`.
-- **Composite Keys:** `(user_id, stock_id)` in `PORTFOLIO` and `WATCHLIST` ensuring duplicate prevention.
+### Primary Keys
+
+The following columns are explicitly declared as primary keys:
+
+| Table | Primary Key |
+|---|---|
+| `APP_USER` | `USER_ID` |
+| `INVESTOR` | `USER_ID` |
+| `ADVISOR` | `ADVISOR_ID` |
+| `ADMIN` | `ADMIN_ID` |
+| `CLIENT` | `CLIENT_ID` |
+| `INDIVIDUAL` | `IND_ID` |
+| `INSTITUTIONAL` | `INS_ID` |
+| `PORTFOLIO` | `PORTFOLIO_ID` |
+| `STOCK` | `STOCK_ID` |
+| `STOCK_PRICE_HISTORY` | `PRICE_ID` |
+| `HOLDING` | `HOLDING_ID` |
+| `TRANSACTIONS` | `TRANS_ID` |
+| `BUY_TRANSACTION` | `BUY_ID` |
+| `SELL_TRANSACTION` | `SELL_ID` |
+
+### Composite Primary Keys
+
+The following tables use multiple columns as their primary keys:
+
+- `WATCHLIST_ITEM`: `(USER_ID, WATCH_ID)`
+- `WATCHLIST_STOCK`: `(USER_ID, WATCH_ID, STOCK_ID)`
+- `ADVISOR_WATCHLIST`: `(ADVISOR_ID, USER_ID, WATCH_ID)`
+
+Composite primary keys help prevent duplicate combinations of the specified column values.
+
+### Foreign Keys
+
+Examples of foreign keys defined in the schema include:
+
+- `INVESTOR.USER_ID` references `APP_USER.USER_ID`.
+- `PORTFOLIO.USER_ID` references `APP_USER.USER_ID`.
+- `HOLDING.PORTFOLIO_ID` references `PORTFOLIO.PORTFOLIO_ID`.
+- `HOLDING.STOCK_ID` references `STOCK.STOCK_ID`.
+- `TRANSACTIONS.PORTFOLIO_ID` references `PORTFOLIO.PORTFOLIO_ID`.
+- `TRANSACTIONS.STOCK_ID` references `STOCK.STOCK_ID`.
+- `STOCK_PRICE_HISTORY.STOCK_ID` references `STOCK.STOCK_ID`.
+- `BUY_TRANSACTION.TRANS_ID` references `TRANSACTIONS.TRANS_ID`.
+- `SELL_TRANSACTION.TRANS_ID` references `TRANSACTIONS.TRANS_ID`.
+
+The other foreign keys are listed in the database relationships section.
 
 ---
 
 ## ☕ Java Backend Explanation
 
-The Java backend uses native HTTP server APIs without requiring heavy enterprise frameworks like Spring Boot:
-- `MainApp.java`: Configures HTTP server context routes (`/api/users`, `/api/stocks`, `/api/transactions`) on port `8080`.
-- Handlers parse incoming JSON payloads, forward operations to the DAO layer, and set standard HTTP headers (`Content-Type: application/json`).
+The Java backend provides the application layer between the frontend and Oracle Database.
+
+Depending on the actual implementation, its responsibilities may include:
+
+- Receiving frontend requests.
+- Processing application operations.
+- Establishing JDBC connections.
+- Executing SQL statements.
+- Returning database results to the frontend.
+
+If the backend uses the following classes, their responsibilities are:
+
+- `MainApp.java` — Application entry point and HTTP server configuration.
+- `DBConnection.java` — Database connection configuration.
+- `DatabaseConnectionTest.java` — Testing database connectivity.
+- `StockDAO.java` — Data access operations involving SQL queries.
+
+These descriptions should be adjusted if the current Java files use different class names or responsibilities.
 
 ---
 
 ## 🔌 JDBC Integration
 
-`StockDAO.java` handles database communication using Oracle JDBC Driver (`ojdbc8.jar`):
-- Establishes connection pools via `DBConnection.java`.
-- Executes SQL operations using `PreparedStatement` to prevent SQL Injection attacks.
-- Invokes PL/SQL functions and stored procedures using `CallableStatement`.
+Java Database Connectivity (JDBC) allows Java applications to communicate with relational databases.
+
+The general connection workflow is:
+
+1. Load or configure the Oracle JDBC driver as required.
+2. Configure the Oracle database connection URL.
+3. Supply the database username and password.
+4. Establish a database connection.
+5. Execute SQL statements.
+6. Process query results.
+7. Close database resources.
+
+`PreparedStatement` can be used for parameterized SQL statements. It helps prevent SQL injection when user-supplied values are passed as parameters instead of being concatenated into SQL strings.
+
+`CallableStatement` can be used to invoke stored procedures and functions if they are implemented in the database.
+
+The actual database operations available depend on the Java source code and database objects.
 
 ---
 
 ## 📡 API Endpoints
 
-- `GET /api/dashboard` - Retrieve aggregated summary counts and chart data.
-- `GET /api/users` - Fetch list of registered investors.
-- `POST /api/users` - Register a new investor profile.
-- `GET /api/stocks` - Retrieve listed equities directory.
-- `POST /api/transactions` - Process atomic buy or sell trade order.
+The following are example endpoints mentioned in the original project documentation. Verify them against the current Java backend before treating them as the complete implemented API.
+
+| Method | Endpoint | Intended Purpose |
+|---|---|---|
+| GET | `/api/dashboard` | Retrieve dashboard information |
+| GET | `/api/users` | Retrieve user information |
+| POST | `/api/users` | Create a user record |
+| GET | `/api/stocks` | Retrieve stock information |
+| POST | `/api/transactions` | Submit a transaction request |
+
+The API route names do not have to match Oracle table names. For example, `/api/users` may be used as a route even when the corresponding database table is `APP_USER`.
+
+The exact supported methods, response formats, validation rules, and CRUD operations must be confirmed from the backend implementation.
 
 ---
 
 ## 🖥️ Frontend Explanation
 
-Built purely with vanilla HTML5, CSS3, and JavaScript:
-- `index.html`: Defines single-page layout structure, navigation tab views, and UI modals.
-- `styles.css`: Implements responsive CSS grid/flexbox layouts and custom variable themes.
-- `app.js`: Manages tab switching logic, state handling, API data fetching, and Chart.js initialization.
+The frontend is intended to provide a web-based interface for interacting with stock portfolio information.
+
+If the project contains the following files, their typical responsibilities are:
+
+- `index.html` — Defines the page structure and interface.
+- `styles.css` — Defines visual styling, layouts, and responsive behaviour.
+- `app.js` — Implements frontend interactions and API requests.
+
+JavaScript can use the Fetch API to send requests to the Java backend and display the returned data.
+
+The frontend should communicate with the API routes configured in the backend.
 
 ---
 
 ## 📁 Project Folder Structure
 
+The DA2 folder is intended to contain the frontend, backend, database scripts, and this README.
+
 ```text
-stock-portfolio-analysis-system/
+DA2_Oracle_Project/
+│
 ├── backend/
-│   ├── DBConnection.java          # Oracle JDBC Connection pool & Env loader
-│   ├── DatabaseConnectionTest.java # JDBC connection verification script
-│   ├── MainApp.java               # Custom Java HTTP REST Server (Port 8080)
-│   ├── StockDAO.java              # Data Access Object executing SQL/PLSQL queries
-│   └── ojdbc8.jar                 # Oracle Database 21c JDBC Driver
+│   ├── DBConnection.java
+│   ├── DatabaseConnectionTest.java
+│   ├── MainApp.java
+│   ├── StockDAO.java
+│   └── ojdbc8.jar
+│
 ├── database/
-│   ├── schema.sql                 # DDL script: Tables, Constraints, Triggers & Views
-│   └── sample_data.sql            # DML script: Initial seed records
+│   ├── schema.sql
+│   └── sample_data.sql
+│
 ├── frontend/
-│   ├── index.html                 # Dashboard layout & HTML5 UI
-│   ├── styles.css                 # Custom responsive layout & component styling
-│   └── app.js                     # Tab routing, state engine & API fetch logic
-├── .gitignore                     # Git exclusion rules
-└── README.md                      # Project documentation
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+│
+└── README.md
 ```
 
-
-## ⚙️ Complete Setup / Run Instructions
-
-### Database Setup
-1. Open SQL*Plus or SQL Developer and connect to your Oracle 21c instance.
-2. Run the database setup scripts:
-   ```sql
-   @database/schema.sql;
-   @database/sample_data.sql;
-   ```
-
-### Backend Setup
-1. Open Command Prompt and navigate to the `backend/` directory:
-   ```cmd
-   cd backend
-   javac -cp ".;ojdbc8.jar" *.java
-   java -cp ".;ojdbc8.jar" backend.MainApp
-   ```
-
-2. The server will start listening at `http://localhost:8080`.
-
-### Frontend Setup
-1. Open your terminal or file explorer and go to the `frontend/` directory.
-2. Double-click `index.html` to launch the client interface in any standard web browser.
+This is the intended structure based on the original project documentation. If your actual folders or filenames differ, update this section to match the repository.
 
 ---
 
-## 🎓 Suggested Demonstration Flow for Your Evaluator
+## ⚙️ Setup and Run Instructions
 
-1. **Architecture & Schema Overview:** Introduce the 3-tier structure (HTML/CSS/JS frontend, Java HTTP REST server, Oracle 21c Database).
-2. **Dashboard Review:** Highlight real-time aggregation cards and Chart.js sector distribution.
-3. **Investor Registration:** Create a new user with a specified risk profile and demonstrate form validation.
-4. **Stock Market Directory:** Search equities using real-time search filters.
-5. **Trade Execution:** Execute an atomic `BUY` order and prove instant transaction logging.
-6. **PL/SQL Verification:** Open SQL*Plus and show the `TRG_UPDATE_PORTFOLIO_CASH` trigger automatically updating cash balances.
+### Prerequisites
+
+Install or configure the following:
+
+- Oracle Database 21c XE.
+- Java Development Kit (JDK).
+- Oracle SQL*Plus or Oracle SQL Developer.
+- A compatible Oracle JDBC driver.
+- A web browser.
+- Visual Studio Code or another code editor.
+
+### 1. Database Setup
+
+1. Start the Oracle database service.
+2. Open SQL*Plus or Oracle SQL Developer.
+3. Connect to the appropriate Oracle database or pluggable database.
+4. Execute the schema script.
+
+If you are using SQL*Plus and the script is located at `DA2_Oracle_Project/database/schema.sql`, navigate to the DA2 project directory and execute:
+
+```sql
+@database/schema.sql
+```
+
+If a `sample_data.sql` file exists and is compatible with the schema, execute:
+
+```sql
+@database/sample_data.sql
+```
+
+**Note:** The supplied `schema.sql` defines the database tables. A separate sample-data script was mentioned in the original documentation, but its contents have not been verified here.
+
+Ensure that the database user has the necessary permissions to create tables and constraints.
+
+### 2. Backend Setup
+
+Open a terminal in the DA2 project directory.
+
+Navigate to the backend folder:
+
+```bash
+cd backend
+```
+
+Compile the Java files using the JDBC driver.
+
+On Windows:
+
+```cmd
+javac -cp ".;ojdbc8.jar" *.java
+```
+
+On Linux or macOS:
+
+```bash
+javac -cp ".:ojdbc8.jar" *.java
+```
+
+Run the Java application using the actual main class and package configuration in your source code.
+
+If `MainApp` is in the default package:
+
+Windows:
+
+```cmd
+java -cp ".;ojdbc8.jar" MainApp
+```
+
+Linux or macOS:
+
+```bash
+java -cp ".:ojdbc8.jar" MainApp
+```
+
+If your Java files declare a package, use the fully qualified main class name and compile from the appropriate directory instead.
+
+The server address and port depend on the configuration in the Java application.
+
+### 3. Frontend Setup
+
+1. Open the `frontend` directory.
+2. Locate `index.html`.
+3. Launch it in a browser or use a local development server.
+4. Confirm that the frontend API base URL matches the running backend.
+5. Test the features that are implemented.
+
+Opening the frontend alone will not guarantee database connectivity. The Java backend and Oracle database must also be running, and the API requests must be configured correctly.
+
+---
+
+## 🎓 Suggested Demonstration Flow
+
+The following flow can be used to present the project, provided the corresponding functionality is implemented.
+
+1. **Project Introduction:** Explain the purpose of the stock portfolio application.
+2. **Architecture:** Present the frontend, Java backend, and Oracle database layers.
+3. **Database Schema:** Show the 17 tables defined in `schema.sql`.
+4. **Key Relationships:** Explain primary keys, foreign keys, and composite keys.
+5. **User and Investor Data:** Demonstrate the relationship between `APP_USER` and `INVESTOR`.
+6. **Stock Data:** Show the `STOCK` table and its price-related columns.
+7. **Portfolio and Holdings:** Explain how `PORTFOLIO` and `HOLDING` represent portfolio positions.
+8. **Transactions:** Demonstrate the relationships among `TRANSACTIONS`, `BUY_TRANSACTION`, and `SELL_TRANSACTION`.
+9. **Watchlists:** Explain the roles of `WATCHLIST_ITEM`, `WATCHLIST_STOCK`, and `ADVISOR_WATCHLIST`.
+10. **JDBC Connectivity:** Show the Java database connection and a successful query.
+11. **Frontend Demonstration:** Demonstrate the available UI features and database operations.
+12. **DBMS Concepts:** Explain constraints, referential integrity, and relational design.
 
 ---
 
 ## 👥 Team Responsibilities
 
-- **Sankhya Bhatia (25BCE1362)** — *Backend Integration*
-- **Vaibhavi Gupta (25BCE1386)** — *Frontend*
-- **Arya Rajendra Yadav (25BCE1374)** — *Database*
+- **Sankhya Bhatia (25BCE1362)** — Backend Integration
+- **Vaibhavi Gupta (25BCE1386)** — Frontend
+- **Arya Rajendra Yadav (25BCE1374)** — Database
 
 ---
 
 ## ⚡ DBMS Concepts Demonstrated
 
-- **Relational Normalization:** 3NF / BCNF compliant database schema design.
-- **Transactional Integrity:** Strict ACID compliance across trade executions.
-- **Advanced PL/SQL Routines:** Stored procedures, functions, automated triggers, and pre-compiled views.
-- **Constraint Enforcement:** `PRIMARY KEY`, `FOREIGN KEY`, `UNIQUE`, `CHECK`, and `NOT NULL` rules.
+### 1. Relational Database Design
+
+The project separates user information, investor details, advisor details, client information, portfolios, stocks, holdings, and transactions into related tables.
+
+### 2. Primary Keys
+
+Primary keys uniquely identify records in their respective tables.
+
+Examples include `USER_ID`, `PORTFOLIO_ID`, `STOCK_ID`, and `TRANS_ID`.
+
+### 3. Foreign Keys
+
+Foreign keys establish relationships between tables and help maintain referential integrity.
+
+### 4. Composite Keys
+
+The watchlist-related tables use composite primary keys to identify records using combinations of columns.
+
+### 5. Constraints
+
+The schema includes constraints such as:
+
+- `PRIMARY KEY`
+- `FOREIGN KEY`
+- `UNIQUE`
+- `NOT NULL`
+
+Some columns also have default values.
+
+### 6. Cascading Deletes
+
+The defined foreign keys use `ON DELETE CASCADE`, allowing related child records to be deleted when the referenced parent record is deleted.
+
+### 7. SQL and JDBC
+
+The Java backend can execute SQL statements through JDBC to interact with Oracle Database.
+
+### 8. Relational Queries
+
+The schema supports relational queries and joins across connected tables, such as portfolios and holdings or stocks and price history.
+
+### 9. Transaction Processing
+
+The database contains transaction-related tables. Application-level transaction handling and ACID behaviour depend on the actual SQL and Java implementation.
 
 ---
 
 ## 📝 Current Implementation Notes
 
-- Operating on local deployment setup (`http://localhost:8080`).
-- Completely framework-free implementation relying on native Java APIs and Oracle JDBC driver.
+- The supplied schema defines 17 tables.
+- `APP_USER` stores general user information.
+- `INVESTOR`, `ADVISOR`, and `ADMIN` store role-specific information.
+- `PORTFOLIO` stores portfolio information and cash balances.
+- `HOLDING` stores stock positions associated with portfolios.
+- `STOCK` stores stock details and current recorded prices.
+- `STOCK_PRICE_HISTORY` stores historical price records.
+- `TRANSACTIONS` stores transaction details.
+- `BUY_TRANSACTION` and `SELL_TRANSACTION` store buy- and sell-specific brokerage information.
+- Watchlist data is represented using three separate tables.
+- The supplied schema does not define separate `USERS`, `STOCKS`, `WATCHLIST`, `DIVIDENDS`, or `PORTFOLIO_ANALYTICS` tables.
+- The schema file does not itself establish which frontend features or API endpoints are operational.
 
 ---
 
 ## 🚀 Future Enhancements
 
-- **Role-Based Access Control (RBAC):** Distinct investor and compliance administrator portals.
-- **External Market API Integration:** Streaming live price feeds for global equities.
-- **Statement Generator:** Exporting PDF/CSV transaction logs and tax statements.
+Add advanced portfolio performance and profit/loss analytics.
+Integrate live stock market data.
+Improve dashboard visualizations and reporting.
+Strengthen authentication and role-based access control.
 
 ---
 
 ## 🔒 Security Note
 
-- **Credential Isolation:** Sensitive credentials stored in environment variables (`DB_USER`, `DB_PASS`) rather than plaintext source code.
-- **SQL Injection Prevention:** All SQL statements compiled using JDBC parameterized `PreparedStatement` wrappers.
+Database credentials should not be committed to the repository. Passwords must be securely handled, and database access should use appropriate permissions and validated queries.
 
 ---
 
-## 🌐 GitHub Repository Information
+## 🌐 Repository Information
 
 - **Repository Name:** `stock-portfolio-analysis-system`
-- **Owner:** `sankhyabhatia1612`
-- **Access Link:** [GitHub Repository](https://github.com/sankhyabhatia1612/stock-portfolio-analysis-system)
+- **GitHub Owner:** `sankhyabhatia1612`
+- **Repository URL:** https://github.com/sankhyabhatia1612/stock-portfolio-analysis-system
+- **DA2 Project:** Oracle Database 21c implementation
+
+---
+
+## 📌 Conclusion
+
+The project demonstrates the use of Java, JDBC, and Oracle Database to organize stock portfolio information and related transactions. Its relational schema provides a foundation for portfolio management and future enhancements.
+
